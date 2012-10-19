@@ -1,3 +1,5 @@
-A web application that authnticates the user against an LDAP server such as ActiveDirectory and redirects to Kndling.
+A node web application that authnticates the user against an LDAP server such as ActiveDirectory and redirects to Kndling.
 
 Uses a shared secret authentication as defined in https://support.kindlingapp.com/kb/article/11/
+
+Uses express library, deployable on CloudFoundry
