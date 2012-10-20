@@ -2,7 +2,7 @@ var https = require('https');
 
 
 var media_root = 'https://radialpoint.kindlingapp.com';
-var kindling_shared_secret = 'wat7gig5aps5yak7tud4quo5hey2him7';
+var kindling_shared_secret = 'w...7';
 var kindling_api_endpoint = 'radialpoint.kindlingapp.com';
 var kindling_api_port = 80;
 
