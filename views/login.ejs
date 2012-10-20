@@ -1,0 +1,130 @@
+
+<!DOCTYPE HTML>
+<!--[if lt IE 7]> <html class="no-js ie ie6 lte9 lte8 lte7"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie ie7 lte9 lte8 lte7"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie ie8 lte9 lte8"> <![endif]-->
+<!--[if IE 9]>    <html class="no-js ie ie9 lte9"> <![endif]-->
+<!--[if !IE]><!--><html class="no-js"><!--<![endif]-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,width=device-width,maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <link rel="shortcut icon" href="<%= media_root %>/img/brand/favicon.png" type="image/x-icon" />
+    
+    <link rel="apple-touch-icon-precomposed" href="<%= media_root %>/img/brand/touch-icon-iphone.png">
+    <link rel="apple-touch-icon-precomposed" href="<%= media_root %>/img/brand/touch-icon-ipad.png" sizes="72x72">
+    <link rel="apple-touch-icon-precomposed" href="<%= media_root %>/img/brand/touch-icon-iphone@2x.png" sizes="114x114">
+    <link rel="apple-touch-icon-precomposed" href="<%= media_root %>/img/brand/touch-icon-ipad@2x.png" sizes="144x144">
+    
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    
+    <title>Login - Radialpoint's Ideas</title>
+    
+    <link rel="stylesheet" href="<%= media_root %>/custom-style/css/build/style.css?_cb_=3.6.2.0">
+    
+    <link rel="gettext" type="application/x-po" href="<%= media_root %>/locale/en_us/LC_MESSAGES/default.po?_cb_=3.6.2.0">
+    
+    <script src="<%= media_root %>/js/build/lib/modernizr.js?_cb_=3.6.2.0"></script>
+    <script src="<%= media_root %>/js/build/lib/tiny_mce/tiny_mce_src.js?_cb_=3.6.2.0"></script>
+    
+    <script data-main="<%= media_root %>/js/build/app" src="<%= media_root %>/js/build/lib/require.js?_cb_=3.6.2.0"></script>
+</head>
+<body id="login" class="auth">
+<section class="wrapper">
+    <div class="logo customLogoLogin"></div>
+    <section id="loginBox" class="form">
+        <div class="message">
+                    </div>
+        <form action="/login" method="post" id="loginForm" name="login">
+            <input type="hidden" name="requestToken" id="requestToken0" value="fae976c93d9e953e5b3dc4f552410094" />
+                            <input type="hidden" name="from" value="/" />
+            
+            
+            <div class="fieldContainer">
+                <label for="email">Email Address / Username</label>
+                <input class="rounded" type="text" id="email" name="email" value="" />
+            </div>
+
+            <div class="fieldContainer">
+                <label for="password">Password</label>
+                <input class="rounded" type="password" id="password" name="password" />
+            </div>
+
+            <input type="submit" class="button button-primary" value="Login" id="loginButton" name="loginButton">
+
+            <label class="sustainLogin">
+                <input type="checkbox" id="keepMeLoggedIn" name="keepMeLoggedIn" />
+                Keep me logged in            </label>
+
+            <a href="#" id="forgotPasswordLink">Reset password</a>
+
+        </form>
+    </section>
+    <section id="forgotPassword">
+        <h1 class="message">Enter your email to receive instructions on resetting your password</h1>
+        <form action="/users/passwordResetRequest" method="post">
+            <input type="hidden" name="requestToken" id="requestToken1" value="1e9fb6fd49ef9e87cb3587434c246b1c" />            <div class="fieldContainer">
+                <label for="email">Email address</label>
+                <input class="rounded" type="text" id="email" name="email" value="">
+            </div>
+            <input type="submit" class="button" value="Send me reset instructions" id="sendPasswordReminderButton" name="sendPasswordReminderButton">
+            <footer>
+                <a href="#" id="backToLogin">&laquo; Back</a>
+            </footer>
+        </form>
+    </section><br />
+</section><script data-name="Loading" type="text/x-handlebars-template"><div class="loading"></div></script><script data-name="LoadMore" type="text/x-handlebars-template"><div class="loadMore" style="text-align:center;">
+    <a class="button" href="#">{{textLoadMore}}</a>
+</div></script><script data-name="FlyoutNav" type="text/x-handlebars-template"><nav class="flyout">
+    <ul>
+        {{#items}}
+            <li><a href="{{url}}">{{title}}</a></li>
+        {{/items}}
+    </ul>
+</nav>
+<span class="spriteCommon sprite-flyout{{arrowIconDir}}Arrow"></span>
+</script><script data-name="AvatarLink" type="text/x-handlebars-template"><a class="avatarLink" href="{{applicationUri}}" title="{{fullName}}">
+    {{> AvatarImage}}
+</a>
+</script><script data-name="AvatarImage" type="text/x-handlebars-template"><img class="avatar {{avatarClassName}}" src="{{avatarUri}}" alt="{{fullName}}" {{#avatarSize}}width="{{.}}" height="{{.}}"{{/avatarSize}}></script><script data-name="UserLink" type="text/x-handlebars-template">{{^isAnonymous}}
+    <a class="author" href="{{applicationUri}}">{{fullName}} {{> UserReputation}}</a>
+{{/isAnonymous}}
+{{#isAnonymous}}
+    <b class="author">{{fullName}}</b>
+{{/isAnonymous}}</script><script data-name="UserReputation" type="text/x-handlebars-template">{{#hasReputation}}
+    <span class="reputation">
+        (<span class="iconReputation"></span>{{reputation}})
+    </span>
+{{/hasReputation}}</script><script data-name="Pagination" type="text/x-handlebars-template">{{#hasPages}}
+    <ol>
+        {{#pages}}
+            <li>
+                <a class="{{#selected}}selected{{/selected}}" data-page-num="{{num}}" href="{{url}}">{{num}}</a>
+            </li>
+        {{/pages}}
+    </ol>
+{{/hasPages}}
+</script><script data-name="MessageBar" type="text/x-handlebars-template"><div class="messageBar {{#isGlobal}}global{{/isGlobal}} {{sentimentClassName}}">
+    {{> MessageBarContents}}
+</div></script><script data-name="MessageBarContents" type="text/x-handlebars-template">{{#isGlobal}}<div class="wrapper">{{/isGlobal}}
+    {{{message}}}
+    {{#isClosable}}
+        <a class="close" href="#"><span class="spriteCommon sprite-close"></span></a>
+    {{/isClosable}}
+{{#isGlobal}}</div>{{/isGlobal}}</script><script data-name="KeywordsList" type="text/x-handlebars-template"><ul class="keywords {{extraClass}}">
+    {{#keywords}}
+        <li class="keyword {{#editable}}isEditable{{/editable}} {{#extra}}hasExtra{{/extra}}">
+            <a href="{{url}}" class="keyword-name">{{keyword}}</a>
+            {{#editable}}
+                <a class="remove" data-keyword="{{keyword}}" href="#">
+                    <span class="spriteCommon sprite-closeKeyword"></span>
+                </a>
+            {{/editable}}
+            {{#extra}}
+                <span class="extra">{{extra}}</span>
+            {{/extra}}
+        </li>
+    {{/keywords}}
+</ul>
+</html>

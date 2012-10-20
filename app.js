@@ -6,6 +6,7 @@
 var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
+  , auth = require('./routes/auth')
   , http = require('http')
   , path = require('path');
 
@@ -24,13 +25,21 @@ app.configure(function(){
   app.use(app.router);
   app.use(require('less-middleware')({ src: __dirname + '/public' }));
   app.use(express.static(path.join(__dirname, 'public')));
+  app.use(function(err, req, res, next){
+    console.error(err.stack);
+    res.status(500);
+    res.render('error', { error: err });
+  });
 });
+
 
 app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
 app.get('/', routes.index);
+app.get('/login', auth.login);
+app.post('/login', auth.submit_login)
 app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){

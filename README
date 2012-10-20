@@ -3,3 +3,14 @@ A node web application that authnticates the user against an LDAP server such as
 Uses a shared secret authentication as defined in https://support.kindlingapp.com/kb/article/11/
 
 Uses express library, deployable on CloudFoundry
+
+
+INSTALLATION
+
+1. Make sure you have node installed.
+2. Install dependencies
+	npm install
+
+3. Run the app
+	npm app.js
+
