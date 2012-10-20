@@ -3,12 +3,12 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , routes = require('./routes')
-  , user = require('./routes/user')
-  , auth = require('./routes/auth')
-  , http = require('http')
-  , path = require('path');
+var express = require('express'),
+  routes = require('./routes'),
+  user = require('./routes/user'),
+  auth = require('./routes/auth'),
+  http = require('http'),
+  path = require('path');
 
 var app = express();
 
@@ -24,7 +24,9 @@ app.configure(function(){
   app.use(express.session());
   app.use(app.router);
   app.use(require('less-middleware')({ src: __dirname + '/public' }));
-  app.use(express.static(path.join(__dirname, 'public')));
+  // supressing jshint warning. see https://github.com/visionmedia/express/issues/589
+  express["static"].apply(null, [__dirname + '/public']); 
+  //app.use(express.static(path.join(__dirname, 'public')));
   app.use(function(err, req, res, next){
     console.error(err.stack);
     res.status(500);
@@ -39,7 +41,7 @@ app.configure('development', function(){
 
 app.get('/', routes.index);
 app.get('/login', auth.login);
-app.post('/login', auth.submit_login)
+app.post('/login', auth.submit_login);
 app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){
