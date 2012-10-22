@@ -12,7 +12,7 @@ var kindling_api_headers = {
 
 exports.login = function(req, res){
   res.render('login', { 
-  	media_root: media_root
+	media_root: media_root
   });
 };
 
@@ -37,7 +37,7 @@ exports.submit_login = function(req, res){
 	options = {
 		host: kindling_api_endpoint,
 		port: kindling_api_port,
-		path: '/api/rest/v1/authenticator',
+		path: '/api/authenticator',
 		method: 'POST',
 		headers: headers
 	};
@@ -47,7 +47,7 @@ exports.submit_login = function(req, res){
 
 	request.on('response', function(response) {
 		response.on('data', function(chunk) {
-			console.log('received from kindling:')
+			console.log('received from kindling:');
 			console.log(chunk);
 
 
@@ -55,12 +55,12 @@ exports.submit_login = function(req, res){
 			res.redirect('http://yahoo.com');
 		});
 		response.on('end', function(chunk) {
-			console.log('end received')
+			console.log('end received');
 		});
 	});
 	
 	req.on('error', function(e) {
-  		console.log('problem with request: ' + e.message);
+		console.log('problem with request: ' + e.message);
 	});
 
 	request.write(data);
