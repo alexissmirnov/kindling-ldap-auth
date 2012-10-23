@@ -47,10 +47,16 @@ exports.submit_login = function(req, res){
 	var request = https.request(options, function(response) {
 		response.setEncoding('utf8');
 
-		response.on('data', function(chunk) {
+		response.on('data', function(kindling_response) {
 			console.log('received from kindling:');
-			console.log(chunk);
+			console.log(kindling_response);
 
+			// error handling
+			// {"error":"Authentication secret was incorrect","errorCode":"FORBIDDEN"}
+			if( kindling_response.error != undefined ) {
+				req.method = 'get';
+				res.redirect('http://yahoo.com');
+			}
 
 			req.method = 'get';
 			res.redirect('http://yahoo.com');
@@ -69,19 +75,7 @@ exports.submit_login = function(req, res){
 		});
 	});
 
-	request.on('response', function(response) {
-		response.on('data', function(chunk) {
-			console.log('received from kindling:');
-			console.log(chunk);
 
-
-			req.method = 'get';
-			res.redirect('http://yahoo.com');
-		});
-		response.on('end', function(chunk) {
-			console.log('end received');
-		});
-	});
 	
 	// req.on('error', function(e) {
 	// 	console.log('problem with request: ' + e.message);
