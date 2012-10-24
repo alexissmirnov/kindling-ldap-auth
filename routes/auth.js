@@ -50,12 +50,15 @@ exports.submit_login = function(req, res){
 		response.on('data', function(kindling_response) {
 			console.log('received from kindling:');
 			console.log(kindling_response);
+			console.log(kindling_response["error"]);
 
 			// error handling
 			// {"error":"Authentication secret was incorrect","errorCode":"FORBIDDEN"}
-			if( kindling_response.error != undefined ) {
-				req.method = 'get';
-				res.redirect('http://yahoo.com');
+			if( kindling_response["error"] ) {
+				res.render('error', {
+					'title': kindling_response["error"], 
+					'description': kindling_response["errorCode"]
+				});
 			}
 
 			req.method = 'get';
