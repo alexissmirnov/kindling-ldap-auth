@@ -52,28 +52,9 @@
             </div>
 
             <input type="submit" class="button button-primary" value="Login" id="loginButton" name="loginButton">
-
-            <label class="sustainLogin">
-                <input type="checkbox" id="keepMeLoggedIn" name="keepMeLoggedIn" />
-                Keep me logged in            </label>
-
-            <a href="#" id="forgotPasswordLink">Reset password</a>
-
         </form>
     </section>
-    <section id="forgotPassword">
-        <h1 class="message">Enter your email to receive instructions on resetting your password</h1>
-        <form action="/users/passwordResetRequest" method="post">
-            <input type="hidden" name="requestToken" id="requestToken1" value="1e9fb6fd49ef9e87cb3587434c246b1c" />            <div class="fieldContainer">
-                <label for="email">Email address</label>
-                <input class="rounded" type="text" id="email" name="email" value="">
-            </div>
-            <input type="submit" class="button" value="Send me reset instructions" id="sendPasswordReminderButton" name="sendPasswordReminderButton">
-            <footer>
-                <a href="#" id="backToLogin">&laquo; Back</a>
-            </footer>
-        </form>
-    </section><br />
+<br />
 </section><script data-name="Loading" type="text/x-handlebars-template"><div class="loading"></div></script><script data-name="LoadMore" type="text/x-handlebars-template"><div class="loadMore" style="text-align:center;">
     <a class="button" href="#">{{textLoadMore}}</a>
 </div></script><script data-name="FlyoutNav" type="text/x-handlebars-template"><nav class="flyout">

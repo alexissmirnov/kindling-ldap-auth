@@ -1,6 +1,6 @@
 var https = require('https');
 var querystring = require('querystring');
-var longjohn = require('longjohn');
+require('longjohn');
 
 var media_root = 'https://radialpoint.kindlingapp.com';
 var kindling_shared_secret = process.env.KINDLING_SHARED_SECRET;
@@ -27,6 +27,8 @@ exports.submit_login = function(req, res){
 	// expires(optional, defaults to 3 hours. for full allowed time formats see here)=+1 day
 	// pattern based on 
 	// http://nodejs.org/docs/v0.4.11/api/http.html#http.request
+	console.log(req.query);
+
 	data = querystring.stringify({ 
 		'user': req.body.email, 
 		'secret': kindling_shared_secret 
@@ -50,39 +52,31 @@ exports.submit_login = function(req, res){
 		response.on('data', function(kindling_response) {
 			console.log('received from kindling:');
 			console.log(kindling_response);
-			console.log(kindling_response["error"]);
+			kindling_response = JSON.parse(kindling_response);
 
+			console.log(kindling_response.error);
+			console.log(kindling_response.success);
 			// error handling
 			// {"error":"Authentication secret was incorrect","errorCode":"FORBIDDEN"}
-			if( kindling_response["error"] ) {
+			if ( kindling_response.success ) {
+				req.method = 'get';
+				res.redirect(media_root + '/login/?user=' + 
+					kindling_response.username + "&token=" + kindling_response.token);
+			} else if( kindling_response.error !== undefined ) {
 				res.render('error', {
-					'title': kindling_response["error"], 
-					'description': kindling_response["errorCode"]
+					'title': kindling_response.error, 
+					'description': kindling_response.errorCode
+				});
+			} else {
+				res.render('error', {
+					'title': "Unknown error", 
+					'description': "!(kindling_response.success) && !(kindling_response.error !== undefined)"
 				});
 			}
-
-			req.method = 'get';
-			res.redirect('http://yahoo.com');
-		});
-		response.on('end', function(chunk) {
-			console.log('end received');
-		});
-	});
-
-	request.on('socket', function(socket) {
-		socket.on('connect', function () {
-			console.log('socket connected!');
-		});
-		socket.on('close', function () {
-			console.log('socket closed!');
 		});
 	});
 
 
-	
-	// req.on('error', function(e) {
-	// 	console.log('problem with request: ' + e.message);
-	// });
 
 	request.write(data);
 	//request.end();
