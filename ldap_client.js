@@ -40,13 +40,13 @@ ask("password:", function(password) {
 	authenticate('alexiss', 
 		password, 
 		function() { 
-			client.search("DC=rp,DC=corp", 
-				{filter: "(&(objectClass=user)(sAMAccountName=alexissx))"}, 
+			client.search("OU=Users,OU=Managed Objects,DC=rp,DC=corp", 
+				{filter: "(&(objectClass=user)(sAMAccountName=alexiss))", scope: "sub"}, // (&(objectClass=user)(sAMAccountName=alexiss))"}, 
 				function(err, res) {
 				  assert.ifError(err);
 
 				  res.on('searchEntry', function(entry) {
-				    console.log('entry: ' + JSON.stringify(entry.object));
+				  	console.log('email address: ' + entry.object.mail)
 				  });
 				  res.on('searchReference', function(referral) {
 				    console.log('referral: ' + referral.uris.join());
