@@ -12,11 +12,12 @@ var ldap_client = ldap.createClient({
 	url: 'ldaps://yul01wdc02.rp.corp:636'
 });
 var ldap_domain = 'rp';
+var ldap_base = 'OU=Users,OU=Managed Objects,DC=rp,DC=corp';
 
 
 // ldapsearch -H ldaps://yul01wdc02.rp.corp:636 -D rp\\alexiss -W -v -x -b DC=rp,DC=corp objectClass=user 
 
-function authenticate(user, password, on_success, on_error) {
+function ldap_authenticate(user, password, on_success, on_error) {
 	// TODO: don't add the domain in case the user specifies one
 	ldap_client.bind(ldap_domain + '\\' + user,  password, function(err) {
 		if( err ) {
@@ -25,6 +26,29 @@ function authenticate(user, password, on_success, on_error) {
 			on_success();
 		}
 	});
+}
+
+// on_success paramaters:
+// user: string
+// email: string
+// on_error paramaters:
+// error object {message, name}
+function ldap_search_email_address(user, on_success, on_error) {
+	ldap_client.search(ldap_base, {
+					filter: "(&(objectClass=user)(sAMAccountName="+username+"))", 
+					scope: "sub"
+				},
+				function(err, res) {
+					assert.ifError(err);
+
+					res.on('searchEntry', function(entry) {
+						on_success(user, entry.object.mail);
+					});
+					
+					res.on('error', function(err) {
+						on_error(err);
+					});
+				}); 
 }
 
 
@@ -36,6 +60,9 @@ exports.login = function(req, res){
 
 exports.submit_login = function(req, res){
 	var on_auth_success = function() {
+		// look up email address in LDAP
+		ldap_search_email_address(req.body.username, function(username, email) {
+
 		// 2. renerate token
 		// 2.1 Make a POST request to your Kindling instance, 
 		// At this location: media_root + '/api/rest/v1/authenticator'
@@ -45,10 +72,11 @@ exports.submit_login = function(req, res){
 		// expires(optional, defaults to 3 hours. for full allowed time formats see here)=+1 day
 		// pattern based on 
 		// http://nodejs.org/docs/v0.4.11/api/http.html#http.request
-		console.log(req.query);
+		console.log("got email: " + email);
+		email = "test1@radialpoint.com";
 
 		data = querystring.stringify({ 
-			'user': req.body.username, 
+			'user': email, 
 			'secret': kindling_shared_secret 
 		});
 
@@ -100,11 +128,15 @@ exports.submit_login = function(req, res){
 		//request.end();
 
 		console.log('wrote request');
+		},
+		function( error ) { 
+			res.render('error', { title: err.name, description: err.message });
+		}); 
 	};
 
 	var on_auth_fail = function(err) {
 		res.render('error', { title: err.name, description: err.message });
-	}
+	};
 	
-	authenticate(req.body.username, req.body.password, on_auth_success, on_auth_fail);
+	ldap_authenticate(req.body.username, req.body.password, on_auth_success, on_auth_fail);
 };

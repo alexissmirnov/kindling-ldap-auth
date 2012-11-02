@@ -16,6 +16,7 @@ function authenticate(user, password, on_success, on_error) {
 	// TODO: don't add the domain in case the user specifies one
 	client.bind(domain + '\\' + user,  password, function(err) {
 		if( err ) {
+			console.log("bind error");
 			on_error(err);
 		} else {
 			on_success();
@@ -41,24 +42,15 @@ ask("password:", function(password) {
 		password, 
 		function() { 
 			client.search("OU=Users,OU=Managed Objects,DC=rp,DC=corp", 
-				{filter: "(&(objectClass=user)(sAMAccountName=alexiss))", scope: "sub"}, // (&(objectClass=user)(sAMAccountName=alexiss))"}, 
+				{filter: "(&(objectClass=user)(sAMAccountName=alexiss))", scope: "sub"}, 
 				function(err, res) {
 				  assert.ifError(err);
 
 				  res.on('searchEntry', function(entry) {
-				  	console.log('email address: ' + entry.object.mail)
-				  });
-				  res.on('searchReference', function(referral) {
-				    console.log('referral: ' + referral.uris.join());
+				  	console.log('email address: ' + entry.object.mail);
 				  });
 				  res.on('error', function(err) {
 				    console.error('error: ' + err.message);
-				  });
-				  res.on('end', function(result) {
-				    console.log('status: ' + result.status);
-				    console.log(result);
-				    console.log(result.json);
-				    
 				  });
 				});  
 		}, 
