@@ -1,6 +1,8 @@
 var https = require('https');
 var querystring = require('querystring');
 var ldap = require('ldapjs');
+var assert = require('assert');
+
 require('longjohn');
 
 var media_root = 'https://radialpoint.kindlingapp.com';
@@ -21,6 +23,8 @@ function ldap_authenticate(user, password, on_success, on_error) {
 	// TODO: don't add the domain in case the user specifies one
 	ldap_client.bind(ldap_domain + '\\' + user,  password, function(err) {
 		if( err ) {
+			console.log("ldap_authenticate: error");
+			console.log(err.message);
 			on_error(err);
 		} else {
 			on_success();
@@ -33,7 +37,7 @@ function ldap_authenticate(user, password, on_success, on_error) {
 // email: string
 // on_error paramaters:
 // error object {message, name}
-function ldap_search_email_address(user, on_success, on_error) {
+function ldap_search_email_address(username, on_success, on_error) {
 	ldap_client.search(ldap_base, {
 					filter: "(&(objectClass=user)(sAMAccountName="+username+"))", 
 					scope: "sub"
@@ -42,7 +46,7 @@ function ldap_search_email_address(user, on_success, on_error) {
 					assert.ifError(err);
 
 					res.on('searchEntry', function(entry) {
-						on_success(user, entry.object.mail);
+						on_success(username, entry.object.mail);
 					});
 					
 					res.on('error', function(err) {
@@ -73,7 +77,6 @@ exports.submit_login = function(req, res){
 		// pattern based on 
 		// http://nodejs.org/docs/v0.4.11/api/http.html#http.request
 		console.log("got email: " + email);
-		email = "test1@radialpoint.com";
 
 		data = querystring.stringify({ 
 			'user': email, 
@@ -138,5 +141,9 @@ exports.submit_login = function(req, res){
 		res.render('error', { title: err.name, description: err.message });
 	};
 	
+	console.log("authenticating with:");
+	console.log(req.body.username);
+	console.log(req.body.password[0]);
+
 	ldap_authenticate(req.body.username, req.body.password, on_auth_success, on_auth_fail);
 };
